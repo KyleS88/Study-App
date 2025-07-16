@@ -1,0 +1,22 @@
+* {
+    margin: 0;
+    padding: 0; 
+    box-sizing: border-box;
+}
+button {
+    cursor: pointer;
+}
+
+#rf-add-term-btn {
+
+}
+.rf-ui {
+    background-color: #7d5ba6;
+    color: white;
+}
+
+.map-editor {
+    display: grid;
+    grid-template-columns: 82% 18%;
+    height: 100vh;
+}
