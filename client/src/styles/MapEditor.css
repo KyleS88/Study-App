@@ -3,6 +3,14 @@
     padding: 0; 
     box-sizing: border-box;
 }
+
+.react-flow {
+  --xy-node-boxshadow-hover-default: 2px 5px 12px rgba(125, 91, 166, 0.8);
+  --xy-node-boxshadow-selected-default: 2px 5px 12px rgba(125, 91, 166, 0.8);
+  --xy-node-border-default: 1.3px solid #7d5ba6;
+  --xy-resize-background-color-default: #9b59b6;
+}
+
 button {
     cursor: pointer;
 }
@@ -19,4 +27,26 @@ button {
     display: grid;
     grid-template-columns: 82% 18%;
     height: 100vh;
+}
+
+.react-flow__node {
+    display: flex;
+    padding: 0; 
+    font-family: sans-serif; 
+    align-items: center;
+    justify-content: center;
+}
+
+.react-flow__node div:nth-child(10) {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.react-flow__node:hover {
+    box-shadow: 2px 5px 12px rgba(125, 91, 166, 0.80); 
+}
+
+.no-edit {
+    pointer-events: none;
+    user-select: none;
 }

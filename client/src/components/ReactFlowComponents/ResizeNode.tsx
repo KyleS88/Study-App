@@ -8,7 +8,7 @@ const ResizeNode = ({ data }:NodeProps<ResizeNodeData> ) => {
     
     return(
         <>
-            <NodeResizer minWidth={30} minHeight={20}/>
+            <NodeResizer minWidth={30} minHeight={20} />
             <Handle type='target' position={Position.Left} />
             <div style={{padding: 10 }}>{data.label}</div>
             <Handle type='source' position={Position.Right} />
