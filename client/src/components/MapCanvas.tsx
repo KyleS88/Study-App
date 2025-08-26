@@ -3,7 +3,7 @@ import '../styles/MapEditor.css'
 import '../store/mapStore'
 import { type MyCanvasProp } from '../assets/types';
 
-const MapCanvas: React.FC<MyCanvasProp> = (props: MyCanvasProp) => {
+const MapCanvas: React.FC<MyCanvasProp> = (props) => {
 
   return (
     <div className='rf-map'>
@@ -14,8 +14,11 @@ const MapCanvas: React.FC<MyCanvasProp> = (props: MyCanvasProp) => {
                 onEdgesChange = { props.onEdgesChange }
                 onConnect = { props.onConnect }
                 nodeTypes = { props.nodeTypes }
+                edgeTypes={ props.edgeTypes}
                 onNodeClick = { props.handleNodeClick }
+                onEdgeClick={ props.handleEdgeClick }
                 onPaneClick = { props.handlePaneClick }
+                onNodesDelete={ props.onNodesDelete }
                 fitView >  
                 <Background />
                 <Controls />
