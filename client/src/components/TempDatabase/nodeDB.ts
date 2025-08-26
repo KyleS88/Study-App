@@ -1,3 +1,2 @@
-import {type Node} from '@xyflow/react';
-
-export const initialNodes:Node[] = [];
+import { type AppNode } from "../../assets/types";
+export const initialNodes: AppNode[] = [];

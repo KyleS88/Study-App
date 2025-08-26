@@ -1,17 +1,28 @@
-import {memo} from 'react'
-import { Handle, Position, NodeResizer } from '@xyflow/react'
-import {type Node, type NodeProps} from '@xyflow/react'
-//Resize node based if node is selected
-//**Come back and refactor to not incorporate react flow */
-type ResizeNodeData = Node<{label: string}, 'string||number'>
-const ResizeNode = ({ data }:NodeProps<ResizeNodeData> ) => {
-    
+import {memo, useEffect, useState} from 'react'
+import { Handle, Position, NodeResizer} from '@xyflow/react'
+import '@xyflow/react/dist/style.css';
+import {type ResizeNodeProps} from '../../assets/types';
+
+const ResizeNode: React.FC<ResizeNodeProps> = ( { id, data, selected, handleUpdateNodeLabel, width, height } ) => {
+    const [dragStatus, setDragStatus] = useState<string>("drag");
+    const [localLabel, setLocalLabel] = useState<string>(data.label);
+    useEffect(()=>{setLocalLabel(data.label)}, [data.label]);
     return(
         <>
-            <NodeResizer minWidth={30} minHeight={20} />
-            <Handle type='target' position={Position.Left} />
-            <div style={{padding: 10 }}>{data.label}</div>
-            <Handle type='source' position={Position.Right} />
+            <NodeResizer minWidth={60} minHeight={40} isVisible={selected} />
+            <Handle type='target' position={Position.Top} />
+            <div>
+                <textarea 
+                    className = {`resize-node-textarea ${dragStatus}`}
+                    name = 'resize-node-textarea'
+                    onClick = {() => setDragStatus("nodrag")}   
+                    onMouseLeave = {() => setDragStatus("drag")}   
+                    value = {localLabel} 
+                    onChange = {(e)=>{handleUpdateNodeLabel(id, e.target.value);}} 
+                    autoFocus = {selected} 
+                    style = {{width: width? width.toString()+'px':'180px', height: height? height.toString()+'px':'60px'}} />
+            </div>
+            <Handle type='source' position={Position.Bottom} />
         </>
     )
 }
