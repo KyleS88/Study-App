@@ -1,14 +1,12 @@
 import '../styles/MapEditor.css'
-import { type MySidebarProps } from '../assets/types'
+import { type MySidebarProps } from '../types/types'
 import { useDataMap} from '../hooks/useMapData'
 import axios, {type AxiosResponse} from 'axios'
-import { useCallback, useEffect, useState} from 'react'
+import { useCallback, useEffect, useRef, useState} from 'react'
 import useDebounce from '../hooks/useDebounce'
-import { useEditNote } from '../hooks/useEditNote'
 
 const MapSidebar: React.FC<MySidebarProps> = (props) => {
-    const { setVisibleNote, visibleNote, setEditContext, handleFocusInput, deleteEdge, setIsEdgeEditing, editContext, setIsNodeEditing, isNodeEditing, deleteNode, handleUpdateNodeNote, handleUpdateEdgeNote, currentNode, setNote, isEdgeEditing, edges} = useDataMap();
-    const editNoteRef = useEditNote();
+    const { editNoteRef, setVisibleNote, visibleNote, setEditContext, handleFocusInput, deleteEdge, setIsEdgeEditing, editContext, setIsNodeEditing, isNodeEditing, deleteNode, handleUpdateNodeNote, handleUpdateEdgeNote, currentNode, setNote, isEdgeEditing, edges} = useDataMap();
 
     useEffect(() => {
         switch (editContext.kind) {
@@ -24,6 +22,7 @@ const MapSidebar: React.FC<MySidebarProps> = (props) => {
             }
             default:
                 setVisibleNote('');
+                editNoteRef.current?.blur();
             };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [editContext, setVisibleNote]);
@@ -33,7 +32,7 @@ const MapSidebar: React.FC<MySidebarProps> = (props) => {
             console.log("Please select a node/ edge to delete");
             return;
         }
-        const editKind: string| null = editContext.kind;
+        const editKind: string|null = editContext.kind;
         try {
             setVisibleNote("");
             if (editKind === 'node') {

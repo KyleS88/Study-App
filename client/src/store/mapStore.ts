@@ -1,11 +1,11 @@
 import { create } from 'zustand';
-import { addEdge, applyNodeChanges, applyEdgeChanges, type EdgeChange, type NodeChange, type Connection, MarkerType } from '@xyflow/react';
-import { type AppState, type AppNode, type AppEdge, type EditContext} from '../assets/types';
+import { addEdge, applyNodeChanges, applyEdgeChanges, type EdgeChange, type NodeChange, type Connection } from '@xyflow/react';
+import { type AppState, type AppNode, type AppEdge, type EditContext} from '../types/types';
 import type { AxiosResponse } from 'axios';
 import axios from 'axios';
 
 const useStore = create<AppState>((set, get) => ({
-    userId: "Admin",
+    userId: "",
     nodes: [] as AppNode[],
     edges: [] as AppEdge[],
     isNodeEditing: [] as string[],
@@ -127,6 +127,8 @@ const useStore = create<AppState>((set, get) => ({
     setVisibleNote: (note: string) => {
         set({visibleNote: note})
     },
-
+    setUserID: (userId: string) => {
+        set({userId})
+    },
 }));
 export default useStore;

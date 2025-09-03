@@ -1,29 +1,10 @@
-import { useEffect, useCallback } from 'react'
+import { useCallback } from 'react'
 import { useDataMap } from '../hooks/useMapData';
 import useDebounce from '../hooks/useDebounce';
-import { useEditNote } from '../hooks/useEditNote';
 import '../styles/MapEditor.css'
+import type { AppNode } from '../types/types';
 const NoteEditor: React.FC<{ setIsEditNote: React.Dispatch<React.SetStateAction<boolean>> }> = ( {setIsEditNote} ) => {
-  const { setEditContext, setVisibleNote, visibleNote, handleUpdateNodeNote, currentNode, editContext, handleFocusInput, edges, handleUpdateEdgeNote, setNote } = useDataMap();
-  const editNoteRef = useEditNote();
-    useEffect(() => {
-        switch (editContext.kind) {
-            case 'node':
-                setVisibleNote(currentNode?.data.note || '');
-                handleFocusInput();
-                break;
-            case 'edge': {
-                editNoteRef.current?.focus();
-                const edge = edges.find(e => e.id === editContext.id);
-                setVisibleNote(edge?.data.note ?? '');
-                break;
-            }
-            default:
-                setVisibleNote('');
-            };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [editContext, setVisibleNote]);
-
+  const { setNodes, setEditContext, setVisibleNote, visibleNote, handleUpdateNodeNote, currentNode, editContext, handleUpdateEdgeNote, setNote } = useDataMap();
     const handleUpdateEdgeNoteDebounce = useDebounce(handleUpdateEdgeNote, 500);
     const handleUpdateNodeNoteDebounce = useDebounce(handleUpdateNodeNote, 500);
     
@@ -31,13 +12,11 @@ const NoteEditor: React.FC<{ setIsEditNote: React.Dispatch<React.SetStateAction<
         console.log(e.target.value)
         const editKind = editContext.kind;
         if (editKind === 'node'){
-                  console.log('node')
-
+            console.log('node');
             handleUpdateNodeNoteDebounce(currentNode?.id, e.target.value);
             setNote(editContext.id, e.target.value, true);
         } else if (editKind === 'edge'){
-                            console.log('edge')
-
+            console.log('edge');
             handleUpdateEdgeNoteDebounce(editContext.id, e.target.value);
             setNote(editContext.id, e.target.value, false);
         };
@@ -47,6 +26,7 @@ const NoteEditor: React.FC<{ setIsEditNote: React.Dispatch<React.SetStateAction<
       setVisibleNote("");
       setIsEditNote(false);
       setEditContext({kind: null});
+      setNodes((prevNode): AppNode[] => prevNode.map((node) => ({...node, selected: false})));
     };
   return (
     <>

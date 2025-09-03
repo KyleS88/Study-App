@@ -1,4 +1,4 @@
-import type {  EditEdgeProps } from "../../assets/types";
+import type {  EditEdgeProps } from "../../types/types";
 import {
   getBezierPath,
   EdgeLabelRenderer,
@@ -8,7 +8,7 @@ import {getEdgeParams} from "../../hooks/utills";
 import { memo } from "react";
 import "../../styles/MapEditor.css"
 // type SpecialPath = { p: string; cx: number; cy: number };
-const EditEdge = ({ id, source, target, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, markerEnd, style }: EditEdgeProps) => {
+const EditEdge = ({ id, source, target, markerEnd, style }: EditEdgeProps) => {
 
     const sourceNode = useInternalNode(source);
     const targetNode = useInternalNode(target);

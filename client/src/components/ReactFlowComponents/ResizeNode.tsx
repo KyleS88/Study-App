@@ -1,7 +1,7 @@
 import { memo, useEffect, useState, useCallback } from 'react'
 import { Handle, Position, NodeResizer} from '@xyflow/react'
 import '@xyflow/react/dist/style.css';
-import { type ResizeNodeProps } from '../../assets/types';
+import { type ResizeNodeProps } from '../../types/types';
 import { useDataMap } from '../../hooks/useMapData';
 import useDebounce from '../../hooks/useDebounce';
 

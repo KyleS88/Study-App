@@ -93,6 +93,8 @@
         deleteEdge: (edgeId: string[]) => void;
         setVisibleNote: (note: string)=>void, 
         visibleNote: string,
+        setUserID: (userId: string) => void,
+
     };
 
     export interface ResizeNodeProps extends NodeProps<AppNode> {

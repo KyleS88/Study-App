@@ -23,15 +23,16 @@ router.get("/", async (req: Request, res: Response) => {
         return res.status(500).send("Error fetching edges");
     }
 });
-// Get edge object of matching edgeId in params
-router.get("/:edgeId", async (req: Request, res: Response) => {
-    const edgeId: string = String(req.params.edgeId);
+// Get all edges for a specfic user
+router.get("/:userId", async (req: Request, res: Response) => {
+    const userId: string = String(req.params.userId);
     try {
-        const sql: string = "SELECT * FROM edges WHERE edge_id=$1;"
-        const result = await pool.query(sql, [edgeId]);
-        return res.status(200).json({message: `Succesfully retrieved edge of edgeId ${edgeId}`, edge: result.rows[0]});
+        const sql: string = "SELECT * FROM edges WHERE user_id=$1;"
+        const result = await pool.query(sql, [userId]);
+        return res.status(200).json({message: `Succesfully retrieved all edges for user: ${userId}`, edges: result.rows});
     } catch (err: any) {
-        return res.status(500).send(`Error in fetching edge: ${edgeId}`);
+        console.error("Error fetching edges:", err);
+        return res.status(500).send(`An error occurred while fetching edges for user ID: ${userId}`);
     };
 });
 // Post all edges from an array of edges in request body

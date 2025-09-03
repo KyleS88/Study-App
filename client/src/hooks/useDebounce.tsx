@@ -1,4 +1,4 @@
-import type { Timer } from "../assets/types";
+import type { Timer } from "../types/types";
 import { useRef, useCallback } from "react";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

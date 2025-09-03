@@ -22,15 +22,16 @@ router.get("/", async (req: Request, res: Response) => {
         return res.status(500).send("Error fetching nodes");
     }
 });
-// Get node object of matching nodeid in params
-router.get("/:nodeId", async (req: Request, res: Response) => {
-    const nodeId: string = String(req.params.nodeId);
+// Get all nodes for userID
+router.get("/:userId", async (req: Request, res: Response) => {
+    const userId: string = String(req.params.userId);
     try {
-        const sql: string = "SELECT * FROM nodes WHERE uuid=$1;"
-        const result = await pool.query(sql, [nodeId]);
-        return res.status(200).json({message: `Succesfully retrieved node of uuid ${nodeId}`, node: result.rows[0]});
+        const sql: string = "SELECT * FROM nodes WHERE user_id=$1;"
+        const result = await pool.query(sql, [userId]);
+        return res.status(200).json({message: `Succesfully retrieved nodes for user: ${userId}`, nodes: result.rows});
     } catch (err: any) {
-        return res.status(500).send(`Error in fetching node: ${nodeId}`);
+        console.error("Error fetching nodes:", err);
+        return res.status(500).send(`An error occurred while fetching nodes for user ID: ${userId}`);
     };
 });
 // Post all nodes from an array of nodes in request body

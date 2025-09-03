@@ -1,7 +1,7 @@
 import { ReactFlow, Background, Controls} from '@xyflow/react';
 import '../styles/MapEditor.css'
 import '../store/mapStore'
-import { type MyCanvasProp } from '../assets/types';
+import { type MyCanvasProp } from '../types/types';
 
 const MapCanvas: React.FC<MyCanvasProp> = (props) => {
 

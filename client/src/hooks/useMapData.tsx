@@ -8,14 +8,15 @@ import {
 } from '@xyflow/react';
 import useStore from '../store/mapStore';
 import { v4 as uuidv4 } from 'uuid';
-import { type AppNode, type ResizeNodeProps, type AppEdge, type AppState, type EditContext} from '../assets/types';
+import { type AppNode, type ResizeNodeProps, type AppEdge, type AppState, type EditContext} from '../types/types';
 import axios, { type AxiosResponse } from 'axios';
 import ResizeNode from '../components/ReactFlowComponents/ResizeNode';
 import EditEdge from '../components/ReactFlowComponents/EditEdge';
 export const apiUrl: string = "http://localhost:5174/api/";
 
 export const useDataMap = () => {
-    const userId: string = useStore((state)=>state.userId);
+    const userID: string = useStore((state)=>state.userId);
+    const setUserID: (userId: string) => void = useStore((state)=>state.setUserID)
     const setNodes: (updater: AppNode[] | ((nodes: AppNode[]) => AppNode[])) => void = useStore((state) => state.setNodes);
     const nodes: AppNode[] = useStore((state) => state.nodes);
     const setEdges: (updater: AppEdge[] | ((nodes: AppEdge[]) => AppEdge[])) => void = useStore((state) => state.setEdges)
@@ -41,6 +42,7 @@ export const useDataMap = () => {
                 console.log(err);
             }
         }, [deleteNode]);
+    const editNoteRef: React.RefObject<HTMLTextAreaElement | null> = useRef<HTMLTextAreaElement>(null);
 
     const setCurrentEdge = useStore((state) => state.setCurrentEdge);
     const currentEdge: AppEdge | null = useStore((state) => state.currentEdge);
@@ -65,7 +67,7 @@ export const useDataMap = () => {
             id,
             type: 'ResizeNode',
             position: {x: window.innerWidth / 2, y: window.innerHeight / 2},
-            data: {label: "", note: "", userId},
+            data: {label: "", note: "", userId: userID},
             style:{
                 height: 60, 
                 width: 180, 
@@ -162,8 +164,7 @@ export const useDataMap = () => {
             throw new Error("No edge/note exists");
         };
         try {
-            const res: AxiosResponse = await axios.patch(`${apiUrl}user/edges/note/${edgeId}/`, {note});
-            if ( res.status === 500) throw new Error(res.data);
+            await axios.patch(`${apiUrl}user/edges/note/${edgeId}/`, {note});
             setNote(edgeId, note, false);
         } catch (err: unknown) {
             if (typeof err === "string") {
@@ -264,8 +265,11 @@ export const useDataMap = () => {
         deleteEdge,
         handleEdgeClick,
         handleFocusInput, 
-        userId,
+        userID,
         visibleNote, 
         setVisibleNote,
+        editNoteRef,
+        setUserID,
+        
     };
 };
