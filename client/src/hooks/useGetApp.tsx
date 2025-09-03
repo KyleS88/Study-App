@@ -1,7 +1,6 @@
 import type { AppEdge, AppNode, RawEdge, RawNode } from "../types/types";
-import { apiUrl } from './useMapData';
 import axios from 'axios';
-import { useDataMap } from './useMapData';
+import { useDataMap, apiUrl } from './useMapData';
 import { useCallback } from "react";
 const useGetApp = () => {
     const { setNodes, setEdges, userID } = useDataMap();
