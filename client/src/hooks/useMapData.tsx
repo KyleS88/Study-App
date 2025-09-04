@@ -190,14 +190,15 @@ export const useDataMap = () => {
     }
 
     const handleSelectAll = useCallback((): void => {
+        setEditContext({kind: 'node', id: 'all'})
         setNodes((nodeSnapshot) => {
-            const updatedNode = nodeSnapshot.map((node: AppNode)=>({...node, selected: true}));
+            const updatedNode: AppNode[] = nodeSnapshot.map((node: AppNode)=>({...node, selected: true}));
             setIsNodeEditing('clear', false);
             updatedNode.forEach((node)=>{setIsNodeEditing(node.id, true)});
             return updatedNode;
             }
         );
-    }, [setNodes, setIsNodeEditing]);
+    }, [setNodes, setIsNodeEditing, setEditContext]);
 
     const handleUnselect = (): void => {
         setNodes((prevNodes) => 

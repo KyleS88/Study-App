@@ -32,7 +32,8 @@ const MapSidebar: React.FC<MySidebarProps> = (props) => {
             console.log("Please select a node/ edge to delete");
             return;
         }
-        const editKind: string|null = editContext.kind;
+        const editKind: string | null = editContext.kind;
+        console.log(editKind)
         try {
             setVisibleNote("");
             if (editKind === 'node') {
