@@ -3,6 +3,8 @@ import { pool } from "../pool";
 import bcrypt from "bcrypt";
 import { v4 as uuid } from "uuid";
 import { QueryResultRow } from "pg";
+import jwt, { type JwtPayload } from "jsonwebtoken"
+import 'dotenv/config'
 export interface UserDB {
     username: string,
     email: string,
@@ -10,7 +12,6 @@ export interface UserDB {
     id: number,
     user_id: string,
 };
-
 export const register = async (req: Request, res: Response) => {
     try {
         const { username, email, password } = req.body;
@@ -74,15 +75,45 @@ export const login = async (req: Request, res: Response) => {
                 message: "Invalid password please try again",
             });
         }
+
+        const jwtSecretKey: string = process.env.ACCESS_TOKEN_SECRET as string;
+        const payload: { userID: string } = {
+            userID: user.rows[0].user_id,
+        };
+        const jwtToken: string = jwt.sign(payload, jwtSecretKey, { expiresIn: '15m' });
+
         return res.status(200).json({
             message: "User logged in succesfully",
             id: user.rows[0].user_id,
             username: user.rows[0].username,
             email: user.rows[0].email,
+            token: jwtToken,
         });
     } catch (err) {
         return res.status(200).json({
             message: "Internal Server Error",
         });
     }
+};
+interface UserPayload extends JwtPayload {
+  userID: string;
+}
+export const authenticateToken = (req: Request, res: Response) => {
+    try {
+        const jwtSecretKey: string = process.env.ACCESS_TOKEN_SECRET as string;
+        const authorizationToken: string = req.headers['authorization']?.split(' ')[1] as string;
+        if (!authenticateToken) return res.status(401).json({message: "Authentication unsuccesful"});
+        const verify: string | UserPayload = jwt.verify(authorizationToken, jwtSecretKey) as UserPayload;
+        if (verify) {
+            return res.status(200).json({message: "Authentication succesful", userID: verify.userID});
+        } else {
+            return res.status(401).json({message: "Authentication unsuccesful"});
+        };
+    } catch(err) {
+        if (err instanceof Error) {
+            return res.status(401).json({message: `An error has occured: ${err.message}`});
+        } {
+            return res.status(401).json({message: "An unexpected error has occured"});
+        };
+    };
 };

@@ -7,10 +7,16 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Alert from "react-bootstrap/Alert"
 import { type UserLogin, loginUser, isValidEmail } from "./service";
-import axios, { type AxiosResponse } from "axios";
+import axios from "axios";
 import { Link, useNavigate  } from "react-router-dom";
 import { useDataMap } from "../../hooks/useMapData";
-const LoginPage: React.FC = () => {
+
+interface LoginPageProps {
+    setIsAuthenticated: (isAuth: boolean) => void
+    setToken: (token: string) => void,
+};
+
+const LoginPage: React.FC<LoginPageProps> = ({ setIsAuthenticated, setToken }) => {
     const { setUserID } = useDataMap();
     const navigate = useNavigate();
     const [email, setEmail] = useState<string>("");
@@ -27,10 +33,14 @@ const LoginPage: React.FC = () => {
             } else {
                 const loginProfile: UserLogin = { email, password };
                 const user = await loginUser(loginProfile);
+                setToken(user.token);
+                localStorage.setItem("token", user.token);
                 setUserID(user.id);
+                setIsAuthenticated(true);
                 navigate('/validated');
-            }
+            };
         } catch (err) {
+            setIsAuthenticated(false);
             if (axios.isAxiosError(err)) {
                 const msg: string = err.response?.data?.message ?? "Request failed";
                 setInvalid(msg);
@@ -39,8 +49,8 @@ const LoginPage: React.FC = () => {
             } else {
                 setInvalid("An unexpected error has occurred, please try again");
             }
-        }
-    }
+        };
+    };
     return (
         <>
             {invalid && <Alert variant="danger" className="text-center" style={{position: 'absolute', top: 0, left: 0, right: 0}}>{invalid}</Alert>}

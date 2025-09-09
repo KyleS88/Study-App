@@ -16,7 +16,7 @@ export const registerUser = async (user: UserRegister) => {
     return response.data;
 };
 
-export const loginUser= async (user: UserLogin) => {
+export const loginUser = async (user: UserLogin) => {
     const response: AxiosResponse = await axios.post(`${apiUrl}user/login`, user);
     return response.data;
 };
